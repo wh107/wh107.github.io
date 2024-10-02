@@ -27,16 +27,12 @@
 		  
 		  .scroller {
 		                width: 720px;
-		                height: 300px;
+		                height: 332px;
 		                overflow-y: scroll;
 		                scrollbar-color: rebeccapurple green;
-		                scrollbar-width: thin;
+		                scrollbar-width: 30px;
 		              }
-		  .centered-content {
-		      width: 90%; /* 设置内容区域的宽度 */
-		      margin-left: auto; /* 左边距设置为自动 */
-		      margin-right: auto; /* 右边距设置为自动 */
-		    }
+		 
 			
 			hr {
 				 background-color: gray;
@@ -45,33 +41,44 @@
 			#fixed-span{
 				position: fixed;
 				top:0px;  /* 距离页面顶部10像素 */
-				left: 8px; /* 距离页面右侧10像素 */
+				left: 0px; /* 距离页面右侧10像素 */
 				background-color: #555555;
 				min-width: 1000px;
 				
 				
 			}
+			
+			html {
+			  scroll-behavior: smooth;
+			}
+			 
+			#myAnchor{
+			  display: block;
+			  position: relative;
+			  top: -50px; /* 调整到你希望的位置 */
+			  left: 0;
+			}
 
 		</style>
 	</head>
-	<body class='markdown-body'>
-<br><br>
-		<p>测试github网页功能 <!-- <a href="1.png" download>下载文件</a> --></p>
-		<span id="fixed-span">
+	<body class='markdown-body' style="align-content: center;" >
+
+<span id="fixed-span">
 		索引：
-		<a href="#link1">采样</a>
-	
+		<a  href="#link1">采样</a>
+		<a  href="#link2">钳制</a><br>
+		<strong>标红参数影响性能开销</strong> 
 		</span>
-		
-		
-		<p><strong>标红参数影响性能开销</strong></p>
-		<a name="link1"></a>
-		<p>采样sampling</p>
-		<div class="container">
-		  
+<!-- 		<p>测试github网页功能 <a href="1.png" download>下载文件</a> p> -->
+
+		<a name="link1" id="myAnchor"></a><br><br>
+		<div>采样sampling</div>
+		 
+		<div class="container" >
+			
 		  <img src="index_files/img/sampling.png" alt="示例图片" title="采样" width="250px">
 		
-		  <p class="scroller" class="container1">
+		  <p class="scroller">
 			  视图><span style="background-color:#aa0000">采样</span>：采样数越高，以性能为代价就会减少锯齿。<br>
 			  时序重投影：移动视图或者播放动画期间降低噪点。<br>
 			  抖动阴影：字面意思，在最终渲染总被开启，也会影响透明阴影投射的阴影。<br>
@@ -81,12 +88,34 @@
 			  阴影>体积阴影:使物体更不容易透光。非常消耗资源(影响性能)，并有局限性。<br>步数：计算体积阴影的步数。<br><br>
 			  <span style="background-color:#aa0000">分辨率</span>：阴影贴图的分辨率百分比。(设置更小分辨率应该可以提升视口性能)
 			  <span class="border-box"></span>
-			  高级>光照阈值：低值提升性能。用于计算切断灯光影响的距离。<br><br><br><br><br><br><br><br><br><br>
+			  高级>光照阈值：低值提升性能。用于计算切断灯光影响的距离。
+			  <br><br><br><br><br><br><br><br><br><br>
 		  </p>
-
+		
 		</div>
 		<span class="border-box"></span>
+		
+		<a name="link2" id="myAnchor"></a>
+		<div>钳制clamping</div>
+		 
+		<div class="container" >
+			
+		  <img src="index_files/img/clamping.png" alt="示例图片" title="采样" width="250px">
+		
+		  <p class="scroller">
+			  这些选项提供了一种方法来限制 <strong>高反射表面</strong> 和 密集体积的光斑和锯齿。<br><br>
+			  表面>直接光：<span style="border-bottom:2px solid yellow;">限制一个表面能<strong> 反射 </strong>的最大光线强度</span><br>它减少锯齿噪点和光斑。<br>设置为0完全关闭钳制。较低的值 对生成的图像有更大的影响 比较高的值。<br><br>
+			  表面>间接光：限制了使用光线追踪和光照探头反射的最大光线强度。
+			  <br><br>
+			  体积>直接光：与 表面直接光 相同，但针对体积直接光照。<br>
+			  体积>间接光：与 表面直接光 相同，但用于体积间接照明。
+			  <br><br><br><br><br><br><br><br><br><br>
+		  </p>
+		
+		</div>
+		
+		<span class="border-box"></span>
 		<div>这个设置浮动菜单</div>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		
 	</body>
 </html>
