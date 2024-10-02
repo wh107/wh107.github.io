@@ -15,9 +15,9 @@
 		  }
 		  
 		  .border-box {
-		    border-bottom: 2px solid black; /* 设置边框样式 */
+		    border-bottom: 2px solid gray; /* 设置边框样式 */
 		    height: 2px; /* 设置高度 */
-		    width: 720px; /* 设置宽度 */
+		    width: 1000px; /* 设置宽度 */
 		    display: inline-block; /* 使div作为行内块显示 */
 		  }
 		  
@@ -37,13 +37,35 @@
 		      margin-left: auto; /* 左边距设置为自动 */
 		      margin-right: auto; /* 右边距设置为自动 */
 		    }
+			
+			hr {
+				 background-color: gray;
+			}
+			
+			#fixed-span{
+				position: fixed;
+				top:0px;  /* 距离页面顶部10像素 */
+				right: 8px; /* 距离页面右侧10像素 */
+				background-color: #555555;
+				min-width: 500px;
+				
+				
+			}
 
 		</style>
 	</head>
 	<body class='markdown-body'>
 
 		<p>测试github网页功能 <!-- <a href="1.png" download>下载文件</a> --></p>
+		<span id="fixed-span">
+		索引：
+		<a href="#link1">采样</a>
+	
+		</span>
+		
+		<br><br>
 		<p><strong>标红参数影响性能开销</strong></p>
+		<a name="link1"></a>
 		<p>采样sampling</p>
 		<div class="container">
 		  
@@ -63,7 +85,7 @@
 		  </p>
 
 		</div>
-		<hr>
+		<span class="border-box"></span>
 		<div>这个设置浮动菜单</div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	</body>
