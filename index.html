@@ -3,8 +3,63 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<style>
+		  .container {
+		    display: flex;
+		    align-items:flex-start;
+		  }
+		  
+		  .border-box {
+		    border-bottom: 2px solid black; /* 设置边框样式 */
+		    height: 2px; /* 设置高度 */
+		    width: 720px; /* 设置宽度 */
+		    display: inline-block; /* 使div作为行内块显示 */
+		  }
+		  
+		  img {
+		    margin-right: 20px; /* 控制图像和文本之间的距离 */
+		  }
+		  
+		  .scroller {
+		                width: 720px;
+		                height: 300px;
+		                overflow-y: scroll;
+		                scrollbar-color: rebeccapurple green;
+		                scrollbar-width: thin;
+		              }
+		  .centered-content {
+		      width: 90%; /* 设置内容区域的宽度 */
+		      margin-left: auto; /* 左边距设置为自动 */
+		      margin-right: auto; /* 右边距设置为自动 */
+		    }
+
+		</style>
 	</head>
 	<body>
-		<p>测试github网页功能a12</p>
+
+		<p>测试github网页功能 <!-- <a href="1.png" download>下载文件</a> --></p>
+		<p><strong>标红参数影响性能开销</strong></p>
+		<p>采样sampling</p>
+		<div class="container">
+		  
+		  <img src="img/sampling.png" alt="示例图片" title="采样" width="250px">
+		
+		  <p class="scroller" class="container1">
+			  视图><span style="background-color:#aa0000">采样</span>：采样数越高，以性能为代价就会减少锯齿。<br>
+			  时序重投影：移动视图或者播放动画期间降低噪点。<br>
+			  抖动阴影：字面意思，在最终渲染总被开启，也会影响透明阴影投射的阴影。<br>
+			  <span class="border-box"></span>
+			  阴影><span style="background-color:#aa0000">光线数量</span>：设置光(射)线的数量来追踪每盏灯光。可以减少随机阴影采样引起的噪点。(光线数量越多，灯光计算就越多( 影响性能))<br><br>
+			  阴影><span style="background-color:#aa0000">步数</span>:较高步数计算结果得到更柔和的阴影，但成本更高(影响性能)。<br><br>
+			  阴影>体积阴影:使物体更不容易透光。非常消耗资源(影响性能)，并有局限性。<br>步数：计算体积阴影的步数。<br><br>
+			  <span style="background-color:#aa0000">分辨率</span>：阴影贴图的分辨率百分比。(设置更小分辨率应该可以提升视口性能)
+			  <span class="border-box"></span>
+			  高级>光照阈值：低值提升性能。用于计算切断灯光影响的距离。<br><br><br><br><br><br><br><br><br><br>
+		  </p>
+
+		</div>
+		<hr>
+		<div>这个设置浮动菜单</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	</body>
 </html>
