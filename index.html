@@ -135,7 +135,7 @@
 分辨率(默1:2)
 </span>：执行光线追踪的分辨率。<span style="border-bottom:2px solid yellow;">较低的选项将更快，使用更少的内存，但会产生更模糊的结果</span>。<br><br>
 			 
-			 最大糙度(默0.5)：BSDF可以使用光线追踪的最大粗糙度。粗糙度较高的BSDF将逐步使用快速GI近似。<span style="border-bottom:2px solid yellow;">值为1将对每个曲面进行光线跟踪，并禁用快速GI</span>。<br><br>
+			  <span style="background-color:#aa0000">最大糙度(默0.5)</span>：BSDF可以使用光线追踪的最大粗糙度。粗糙度较高的BSDF将逐步使用快速GI近似。<span style="border-bottom:2px solid yellow;">值为1将对每个曲面进行光线跟踪，并禁用快速GI</span>。<br>总结：默认0.5时，表示使用一半的计算光线追踪与快速gi近似，越低的值使用更多快速gi近似模拟，越高的值使用计算光线跟踪，性能消耗就越大。<br><br>
 			 
 			 <strong>屏幕追踪</strong>：设置控制屏幕空间光线跟踪的行为。<br><br>
 			 ▶ <span style="background-color:#aa0000">精度(默0.25)</span>：增加屏幕空间光线追踪的精度，但降低了最大跟踪距离。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="border-bottom:2px solid yellow;">增加精度同时也增加性能成本</span>。<br>
