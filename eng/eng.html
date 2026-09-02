@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>最近英语生词</title>
+		<style>
+			/* css部件
+			问答块最外层容器 .faq-container 
+			问答项（包含问题和答案）.faq-item
+			问题块 .faq-question
+			答案块 .faq-answer-wrapper
+			答案内容 faq-answer-content */
+			
+			body {
+					font-family: 'Microsoft YaHei', sans-serif;
+					/* sans-serif 代表的无衬线字体。
+					/* display: flex; */
+					height: 100vh;
+					background-color: rgb(32, 35, 42);
+					color: #dddddd; 
+				} 
+			/* 1. 基础样式 - 与微软页面风格类似 */
+			.faq-container {
+				max-width: 800px;
+				margin: 20px auto;
+				font-family: 'Segoe UI', sans-serif;
+				border: 1px solid #e0e0e0;
+				border-radius: 8px;
+				overflow: hidden;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+			}
+
+			.faq-item {
+				border-bottom: 1px solid #f0f0f0;
+			}
+
+			.faq-item:last-child {
+				border-bottom: none;
+			}
+
+			/* 2. 问题（可点击区域）样式 */
+			.faq-question {
+				padding: 18px 24px;
+				/* background-color: #fafafa; */
+				cursor: pointer;
+				font-weight: 600;
+				/* color: #1a1a1a; */
+				transition: background-color 0.2s ease;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				user-select: none;
+			}
+
+			.faq-item.active {
+							background-color: #250;
+						}
+						.faq-question:hover {
+							background-color: #05a;
+						}
+
+			/* 问题右侧的箭头指示器 */
+			.faq-question::after {
+				content: "▼";
+				font-size: 0.8em;
+				color: #666;
+				transition: transform 0.3s ease;
+			}
+
+			/* 展开时，箭头旋转180度 */
+			.faq-item.active .faq-question::after {
+				transform: rotate(180deg);
+			}
+
+			/* 3. 答案容器 - 控制高度动画的关键 */
+			.faq-answer-wrapper {
+				max-height: 0;
+				/* 初始为0，隐藏 */
+				overflow: hidden;
+				/* 隐藏溢出内容 */
+				transition: max-height 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+				/* 缓动动画 */
+				background-color: #444;/* rgb(32, 35, 42) */
+			}
+
+			/* 展开时，最大高度设为足够大的值 */
+			.faq-item.active .faq-answer-wrapper {
+				max-height: 500px;
+				/* 需大于实际内容高度，可设大些 */
+			}
+
+			.faq-answer-content {
+				padding: 0 24px 24px 24px;
+				/* color: #333; */
+				line-height: 1.6;
+			}
+
+			/* 答案内容 - 控制滑入和淡入 */
+			.faq-answer-content {
+				opacity: 0;
+				transform: translateY(-12px);
+				/* 初始位置向上偏移12px */
+				transition:
+					opacity 0.3s ease 0.1s,
+					/* 淡入延迟 0.1s 开始 */
+					transform 0.3s ease 0.1s;
+				/* 滑动延迟 0.1s 开始 */
+			}
+
+			/* 展开时加一点延迟，让动画有先后顺序 */
+			.faq-item.active .faq-answer-content {
+				transition-delay: 0.08s;
+				/* 仅展开时延迟 */
+				opacity: 1;
+				transform: translateY(0);
+				/* 滑到正常位置 */
+			}
+
+			/* 收起状态 - 这个其实是默认状态，但为了明确，可以写上 */
+			.faq-item:not(.active) .faq-answer-content {
+				opacity: 0;
+				transform: translateY(-12px);
+			}
+
+
+			/* 自定义 */
+			h1 {
+				text-align: center;
+			}
+			
+			/* 表格table相关 */
+			/* ------------------------------> */
+			th {
+				text-align: left
+			}
+			tr td code {
+				box-sizing: border-box;
+				padding:2px 5px 2px 5px;
+				display: inline-flex;
+				border-radius: 6px;
+				background-color:#2c2c2e
+
+			}
+			table {
+					max-width: 800px;
+					margin: 20px auto;
+					/* font-family: 'Segoe UI', sans-serif; */
+					/* border: 1px solid #e0e0e0; */
+					border-radius: 8px;
+					overflow: hidden;
+					border-collapse: collapse;
+				}
+			table td {
+				border-bottom: 1px solid #e0e0e0;
+			}
+			table th {
+				border-bottom: 1px solid #e0e0e0;
+			}
+			/* <------------------------------ */
+		</style>
+	</head>
+	<body>
+		<!-- 统计结果显示区域 -->
+		        <div class="stats" id="statsDisplay" style="position: fixed;right:0;background-color: #004444;">
+		            <span>📌 当前生词总数为</span>
+		            <span class="number" id="countDisplay">0</span>
+		            <span>个</span>
+		        </div>
+		<!-- 包裹item的大容器 -->
+		<div class="faq-container">
+			<h1>2026-9-2</h1>
+			<!-- 问答项 24 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					accumulated
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						accumulated &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/accumulated.mp3"></audio>听发音</button>&nbsp
+						英/əˈkjuːmjəleɪtɪd/    v.积累 adj.积累的 accumulate的过去分词和过去式<br>
+						over the years many new features have accumulated 
+					</div>
+				</div>
+			</div>
+			
+			<h1>2026-9-1</h1>
+			<!-- 问答项 23 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					originally
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						originally &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/originally.mp3"></audio>听发音</button>&nbsp
+						英/əˈrɪdʒənəli/    adv.最初<br>
+						There were originally just a few dot commands, 
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 22 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					certain
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						certain &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/certain.mp3"></audio>听发音</button>&nbsp
+						英/ˈsɜːtn/   pron.某些，某个（限定词）<br>
+						adj.确定的<br>
+						or to execute certain prepackaged query statements. 
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 21 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					typecally
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						typecally &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/typecally.mp3"></audio>听发音</button>&nbsp
+						英/ˈtɪpɪkli/    adv.通常<br>
+						These "dot commands" are typically used to change the output format of queries,
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 20 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					intercepted<br>
+					interpreted
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						intercepted &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/intercepted.mp3"></audio>听发音</button>&nbsp
+						 英/ˌɪntəˈseptɪd/   v.截获 intercept的过去分词和过去式<br>
+						 interpreted &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/interpreted.mp3"></audio>听发音</button>&nbsp
+						  英/ɪnˈtɜːprətɪd/   v.解释 interpret的过去分词和过去式<br>
+						But input lines that begin with a dot (".") are intercepted and interpreted by the sqlite3 program itself. 
+					</div>
+				</div>
+			</div>
+			
+			<h1>2026-8-29</h1>
+			<!-- 问答项 19 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					sensible
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						experiment &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/sensible.mp3"></audio>听发音</button>&nbsp
+						英/ˈsensəbl/   adj.合理的<br>
+						, and tries to guess sensible defaults.
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 18 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					experiment
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						experiment &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/experiment.mp3"></audio>听发音</button>&nbsp
+						英 [ɪkˈsperɪmənt]  n.实践，实验 vi.尝试<br>
+					</div>
+				</div>
+			</div>
+			
+			<h1>2026-8-28</h1>
+			<!-- 问答项 17 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					ambiguity
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						ambiguity &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/ambiguity.mp3"></audio>听发音</button>&nbsp
+						英/ˌæmbɪˈɡjuːəti/  n.歧义，模棱两可<br>
+						with forward-slash directory separators to avoid ambiguity.   <br>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 16 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					Alternatively
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						Alternatively &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/aternatively.mp3"></audio>听发音</button>&nbsp
+						英/ɔːlˈtɜːnətɪvli/  adv.或者<br>
+						Alternatively, you can create a new database using the default temporary storage,   <br>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 15 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					persistent
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						persisitent &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/persistent.mp3"></audio>听发音</button>&nbsp
+						英/pəˈsɪstənt/  adj.持续的，持久的<br>
+						To use a persistent disk file as the database,   <br>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 14 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					omit
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						omit &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/omit.mp3"></audio>听发音</button>&nbsp
+						英/əˈmɪt/ v.省略,忽略<br>
+						If you omit the semicolon,  <br>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 13 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					semicolon
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						semicolon &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/semicolon.mp3"></audio>听发音</button>&nbsp
+						英/ˌsemiˈkəʊlən/  n.分号<br>
+						 terminated by a semicolon <br>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 问答项 12 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					terminated
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						terminated &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/terminated.mp3"></audio>听发音</button>&nbsp
+						英/ˈtɜːmɪneɪtɪd/ v.终止<br>
+						terminate的过去分词和过去式<br>
+						 terminated by a semicolon <br>
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 11 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					transient
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						transient &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/transient.mp3"></audio>听发音</button>&nbsp
+						/ˈtrænziənt/ adj.临时的，短暂的<br>
+						 a transient in-memory database is used. <br>
+						 与temporary 区别：<br>
+						 -transient 强调持续时间极短，几乎“片刻间”就消失<br>
+						 -temporary 强调有时间限制，知道会结束或更换
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 10 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					engine
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						engine &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/engine.mp3"></audio>听发音</button>&nbsp
+						英/ˈendʒɪn/ n.引擎 <br>
+						The SQLite library is code that implements an SQL database engine.<br>
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 9 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					versus
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						versus &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/versus.mp3"></audio>听发音</button>&nbsp
+						/ˈvɜːrsəs/ prep.对比，与。。。比较 <br>
+						SQLite command-line program versus the SQLite library<br>
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 8 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					brief
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						brief &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/brief.mp3"></audio>听发音</button>&nbsp英/briːf/
+						adj.简要的 <br>
+						his document provides a <span style="color:#00b0f0">brief</span> introduction on how to use the sqlite3 program.<br>
+
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 7 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					against
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						against &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/against.mp3"></audio>听发音</button>&nbsp英/əˈɡenst/
+						对…进行操作 <br>
+						that allows the user to run SQL statements interactively <span style="color:#00b0f0">against</span> an SQLite
+						database. <br>
+						在这个句子里，against 翻译为“针对”或“对…进行操作”是最贴切的。<br>
+						允许用户交互式的运行 SQL 语句，对sqlite数据库进行操作。
+					</div>
+				</div>
+			</div>
+			<h1>2026-8-27</h1>
+			<!-- 问答项 6 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					prohibit
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						prohibit &nbsp<button class="play"><audio class="audio" src="audio/audio_26shengci/prohibit.mp3"></audio>听发音</button>&nbsp
+
+						英/prəˈhɪbɪt/ v.禁止
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 5 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					permit
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						permit 英/pəˈmɪt , ˈpɜːmɪt/ v.许可
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 4 -->
+			<div class="faq-item">
+				<div class="faq-question">
+					archive
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						archive /ˈɑːkaɪv/ n.档案 v.存档
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 1 -->
+			<div class="faq-item">
+				<!-- 默认展开第一个 -->
+				<div class="faq-question">
+					align
+				</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						align /əˈlaɪn/ v.排列，对齐
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 2 -->
+			<div class="faq-item">
+				<div class="faq-question">collapse</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						collapse /kəˈlæps/ n.塌陷
+					</div>
+				</div>
+			</div>
+			<!-- 问答项 3 -->
+			<div class="faq-item">
+				<div class="faq-question">separate</div>
+				<div class="faq-answer-wrapper">
+					<div class="faq-answer-content">
+						separate /ˈseprət , ˈsepəreɪt/ v.分开
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th><span class="">字段</span></th>
+					<th><span class="">含义</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>root</code></td>
+					<td><span class="">以 root 管理员身份运行</span></td>
+				</tr>
+				<tr>
+					<td><code>3519</code></td>
+					<td><span class="">进程 ID（PID）</span></td>
+				</tr>
+				<tr>
+					<td><code>2856</code></td>
+					<td><span class="">父进程 ID（PPID），通常是 systemd 或 init 系统启动的</span></td>
+				</tr>
+				<tr>
+					<td><code>97</code></td>
+					<td><span class="">CPU 占用率 97%，说明正在高强度下载/解压</span></td>
+				</tr>
+				<tr>
+					<td><code>08:56</code></td>
+					<td><span class="">启动时间</span></td>
+				</tr>
+				<tr>
+					<td><code>?</code></td>
+					<td><span class="">没有关联终端（后台守护进程）</span></td>
+				</tr>
+				<tr>
+					<td><code>00:12:21</code></td>
+					<td><span class="">已经运行了 12 分 21 秒</span></td>
+				</tr>
+				<tr>
+					<td><code>后面的命令</code></td>
+					<td><span class="">实际执行的完整命令</span></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<script>
+			// 获取所有问题元素
+			const questions = document.querySelectorAll('.faq-question');
+
+			questions.forEach(question => {
+				question.addEventListener('click', function() {
+					// 找到当前问题所在的 .faq-item 容器
+					const currentItem = this.closest('.faq-item');
+					// 切换当前容器的 'active' 类
+					currentItem.classList.toggle('active');
+
+					e.firstChild
+
+					// --- 可选：实现“手风琴”效果（展开一个时，自动收起其他同级的项）---
+					// 获取所有同级的 .faq-item
+					// const allItems = currentItem.parentElement.querySelectorAll('.faq-item');
+					// allItems.forEach(otherItem => {
+					//     // 如果其他项不是当前项，并且处于展开状态，则移除 'active'
+					//     if (otherItem !== currentItem && otherItem.classList.contains('active')) {
+					//         otherItem.classList.remove('active');
+					//     }
+					// });
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			//播放单词
+			let audiobn_Element = document.querySelectorAll('.play');
+
+			//console.log(audiofile_Element);
+			for (let i = 0; i < audiobn_Element.length; i++) {
+				audiobn_Element[i].onclick = function(e) {
+					// console.log(e.target.firstChild);
+					e.target.firstChild.play();
+				}
+
+			}
+		</script>
+		
+		<script type="text/javascript">
+			// 方法一：getElementsByClassName（推荐用于单一类名）
+			const items = document.getElementsByClassName('faq-item');
+			const count = items.length;
+			
+			// 方法二：querySelectorAll（更通用，支持复杂选择器）
+			// const items = document.querySelectorAll('.faq-item');
+			// const count = items.length
+			
+			// 显示到页面
+			document.getElementById('countDisplay').textContent = count;
+		</script>
+	</body>
+</html>
