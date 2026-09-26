@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Markdown 预览</title>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> -->
+
+
+		<style>
+			body {
+				-webkit-text-size-adjust: 100%;
+				/* color: #abb2bf; */
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "微软雅黑";
+				font-size: 16px;
+				line-height: 1.5;
+				word-wrap: break-word;
+				background-color: #282c34;
+				box-sizing: border-box;
+				min-width: 200px;
+				/* max-width: 980px; */
+				/* margin: 0 auto; */
+				/* padding: 45px; */
+				display: block;
+			}
+		
+			#content {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				/* width: 100%; */
+				box-sizing: border-box;
+			}
+					
+			p {
+				margin-top: 0;
+				margin-bottom: 16px;
+			}
+					
+			h1,
+			h2,
+			h3 {
+				margin-top: 1.5em;
+				margin-bottom: 0.6em;
+				color: #fff;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+				padding-bottom: 6px;
+			}
+					
+			h1 {
+				font-size: 2em;
+				border-bottom-width: 2px;
+				padding-bottom: 10px;
+			}
+					
+					
+					
+					
+			code {
+				background: #414141;
+				padding: 2px 5px;
+				border-radius: 3px;
+				font-family: Consolas, monospace;
+			}
+					
+			pre code {
+				background: none;
+				padding: 0;
+			}
+					
+			blockquote {
+				border-left: 4px solid #ddd;
+				padding-left: 15px;
+				color: #666;
+				margin: 1em 0;
+			}
+					
+			ul,
+			ol {
+				padding-left: 1.5em;
+			}
+					
+			#picker {
+				margin-bottom: 20px;
+			}
+					
+			body.dark {
+				background: #282c34;
+				color: #ddd;
+			}
+					
+			/* 自己加 */
+			a {
+				/* color: #aa0; */
+					
+				color: #528bff;
+				/*#abb2bf  */
+					
+				text-decoration: none;
+			}
+					
+			a:hover {
+				text-decoration: underline;
+			}
+					
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+				width: 100%;
+				margin: 1em 0;
+			}
+					
+			th,
+			td {
+				padding: 8px 12px;
+				text-align: left;
+				border-bottom: 1px solid rgb(55, 59, 62);
+			}
+					
+			th {
+				background: #414141;
+				color: #fff;
+				border-bottom: 2px solid rgb(102, 95, 84);
+				text-align: center;
+			}
+					
+			td {
+				vertical-align: middle;
+				/* 表格行高不一时，让文字垂直居中： */
+			}
+					
+			/*使hr标签变细*/
+			hr {
+				background: rgba(255, 255, 255, .12);
+				border: none;
+				height: 1px;
+				margin: 32px 0;
+				display: block;
+					
+			}
+					
+			/* 加入图片自动缩放 */
+			img {
+				max-width: 100%;
+				height: auto;
+				display: block;
+				margin: 1em auto;
+				border-radius: 4px;
+			}
+					
+			/* 纯css,js 代码复制按钮 */
+			/* 代码块容器 */
+			pre {
+				position: relative;
+				/* 让复制按钮能绝对定位 */
+				background: #414141;
+				padding: 12px;
+				border-radius: 4px;
+				overflow-x: auto;
+			}
+					
+			/* 复制按钮 */
+			.copy-btn {
+				position: absolute ;
+				top: 8px;
+				right: 8px;
+				padding: 4px 10px;
+				font-size: 12px;
+				color: #fff;
+				background: #4CAF50;
+				border: none;
+				border-radius: 3px;
+				cursor: pointer;
+				opacity: 1;
+				transition: opacity 0.2s;
+			}
+					
+			/* 鼠标移到代码块上才显示按钮 */
+			pre:hover .copy-btn {
+				opacity: 1;
+			}
+					
+			/* 复制成功状态 */
+			.copy-btn.copied {
+				background: #2e7d32;
+			}
+			
+			
+			/* footer {
+			    display: none;
+			    
+			} */
+			
+			.note-tips {
+			  display: none !important;
+			}
+		</style>
+		
+		<!-- Mdtht可以根据h1-h6自动生成目录 -->
+		<link rel="stylesheet" href="mdtht.min.css">
+		
+		
+	</head>
+	<body class="dark">
+		<div id="content">加载中...</div>
+
+
+
+
+
+		<script src="./javascripts/marked.min.js"></script>
+		<script>
+			fetch('./javascripts/git速查.md')
+				.then(res => res.text())
+				.then(text => {
+					// 关键：统一半角空格，数据清洗
+					// 1. 统一换行符：Windows / 旧 Mac → 标准换行
+					text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+					// 2. 清洗奇怪空格
+					text = text
+						.replace(/\u3000/g, ' ') // 全角空格 → 半角空格
+						.replace(/\u00A0/g, ' ') // 不换行空格 → 半角空格
+						.replace(/\t/g, '    '); // Tab → 4 个半角空格
+
+					// 3. 去掉零宽字符（从网页复制常带）
+					text = text.replace(/[\u200B-\u200D\uFEFF]/g, '');
+
+					document.getElementById('content').innerHTML = marked.parse(text);
+					// console.log('marked 渲染完成', Date.now());
+					// 渲染完成后，给每个代码块加复制按钮
+					// addCopyButtons();
+					// 2. 动态加载 mdtht.min.js
+					const s = document.createElement('script');
+					s.src = 'mdtht.min.js';
+					s.onload = () => {
+					  // 3. 脚本加载完，initMdtht 才存在，这时再调
+					  window.initMdtht();
+					  addCopyButtons();
+					};
+					document.body.appendChild(s);
+					// 动态加载 Mdtht
+					// const s = document.createElement('script');
+					// s.src = './mdtht.min.js';
+					// s.onload = () => {
+						
+					//   // 脚本加载完了，手动触发一次它监听的事件
+					//   window.dispatchEvent(new Event('DOMContentLoaded'));
+					//   // 如果上面不行，换下面这行
+					//   // document.dispatchEvent(new Event('DOMContentLoaded'));
+					// };
+					// document.body.appendChild(s);
+					
+					
+					function addCopyButtons() {
+						var blocks = document.querySelectorAll('#content pre');
+					
+						blocks.forEach(function (pre) {
+							// 防止重复添加
+							if (pre.querySelector('.copy-btn')) return;
+					
+							var btn = document.createElement('button');
+							btn.className = 'copy-btn';
+							btn.innerText = '复制';
+					
+							btn.addEventListener('click', function () {
+								// 获取代码块里的纯文本
+								var code = pre.querySelector('code');
+								var text = code ? code.innerText : pre.innerText;
+					
+								// 写入剪贴板
+								if (navigator.clipboard) {
+									navigator.clipboard.writeText(text).then(function () {
+										btn.innerText = '已复制';
+										btn.classList.add('copied');
+										setTimeout(function () {
+											btn.innerText = '复制';
+											btn.classList.remove('copied');
+										}, 1500);
+									});
+								} else {
+									// 兼容老浏览器
+									var textarea = document.createElement('textarea');
+									textarea.value = text;
+									document.body.appendChild(textarea);
+									textarea.select();
+									document.execCommand('copy');
+									document.body.removeChild(textarea);
+					
+									btn.innerText = '已复制';
+									btn.classList.add('copied');
+									setTimeout(function () {
+										btn.innerText = '复制';
+										btn.classList.remove('copied');
+									}, 1500);
+								}
+							});
+					
+							pre.appendChild(btn);
+						});
+					}
+					
+				});
+				
+				
+				
+				
+		</script>
+
+		
+		  
+		
+	</body>
+</html>
